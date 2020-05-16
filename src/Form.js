@@ -1,7 +1,28 @@
 import React, { useState } from 'react';
+//import axios from 'axios';
+import * as yup from 'yup';
+
+
+
+
+//this is going to be for my errors. i think i will do all expect for special intructions and toppings. 
+const formSchema = yup.object().shape({
+    name: yup.string().required("Please add your name"),
+    size: yup.string().required("Please pick your size"),
+    sauce: yup.string().required("Please pick your sauce"),
+    pepperoni:yup.boolean(), 
+    garlic:yup.boolean(), 
+    pineapple:yup.boolean(), 
+    olives:yup.boolean(), 
+    mushrooms:yup.boolean(), 
+    onions:yup.boolean(), 
+    request:yup.string(),
+    number:yup.string().required("How many would you like"),
+})
 
 function Form (){
 
+    //main states
     const [ formState , setFormState ] = useState({
         name:'',
         size:'',
@@ -16,35 +37,64 @@ function Form (){
         number:'',
     });
 
-    const clearForm = () => {
-        setFormState({
-            name:'',
-            size:'',
-            sauce:'',
-            pepperoni:false, 
-            garlic:false, 
-            pineapple:false, 
-            olives:false, 
-            mushrooms:false, 
-            onions:false, 
-            request:'',
-            number:'',
-        })
-    }
+
+    const validate = e => {
+        let value =
+          e.target.type === "checkbox" ? e.target.checked : e.target.value;
+        yup
+          .reach(formSchema, e.target.name)
+          .validate(value)
+          .then(valid => {
+            errorState({
+              ...error,
+              [e.target.name]: ""
+            });
+          })
+          .catch(err => {
+            errorState({
+              ...error,
+              [e.target.name]: err.errors[0]
+            });
+          });
+      };
 
 
+    //this is going to be my error state
+    const [ error , errorState ] = useState({
+        name:'',
+        size:'',
+        sauce:'',
+        pepperoni:false, 
+        garlic:false, 
+        pineapple:false, 
+        olives:false, 
+        mushrooms:false, 
+        onions:false, 
+        request:'',
+        number:'',
+    });
+
+
+
+    //clear form state when we submit. this will clear the document
+    
+
+
+    //input change 
     const inputChange = e => {
         e.persist();
         // console.log("input changed!", e.target.value, e.target.checked);
+        validate(e);
         let value =
           e.target.type === "checkbox" ? e.target.checked : e.target.value;
         setFormState({ ...formState, [e.target.name]: value });
       };
 
+      //submit my form
     const formSubmit = e => {
         e.preventDefault();
         console.log("form submitted!");
-        clearForm();
+        
     };
 
     return (
@@ -59,6 +109,9 @@ function Form (){
           value={formState.name}
           onChange={inputChange}
         />
+        {error.name.length > 2 ? (
+          <p className="error">{error.name}</p>
+        ) : null}
            </label>
            <br/>
 
@@ -78,6 +131,9 @@ function Form (){
                    <option value="Large">Large</option>
                    <option value="X-Large">X-Large</option>
                </select>
+               {error.size.length > 0 ? (
+          <p className="error">{error.size}</p>
+        ) : null}
            </label>
            <br/>
            </div>
@@ -96,13 +152,16 @@ function Form (){
                    <option value="Garlic">Garlic White Sauce</option>
                    <option value="Alfredo">Alfredo</option>
                </select>
+               {error.sauce.length > 0 ? (
+          <p className="error">{error.sauce}</p>
+        ) : null}
            </label>
            <br/>
            </div>
 
            <div className='toppings'>
            <label htmlFor="toppings">
-           Pick Your Toppings</label>
+           Pick Up To 5 Toppings</label>
            <br/>
         <input
           type="checkbox"
@@ -190,6 +249,9 @@ function Form (){
                    <option value="four">4</option>
                    <option value="five">5</option>
                </select>
+               {error.number.length > 0 ? (
+          <p className="error">{error.number}</p>
+        ) : null}
            </label>
            <button>ADD TO ORDER</button>
            </div>

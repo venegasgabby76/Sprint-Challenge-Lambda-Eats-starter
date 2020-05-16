@@ -16,3 +16,9 @@ html{
   align-items: center;
   font-size: 30px;
 }
+
+
+p{
+  font-size: 12px;
+  color: red;
+}
