@@ -228,7 +228,7 @@ function Form (){
             <textarea
             name="request"
             id="request"
-            placeholder="Put instructions here!"
+            placeholder="Add instructions here!"
             value={formState.request}
             onChange={inputChange}
             />
