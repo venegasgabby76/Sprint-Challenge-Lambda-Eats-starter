@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-//import axios from 'axios';
+import axios from 'axios';
 import * as yup from 'yup';
 
 
@@ -38,6 +38,8 @@ function Form (){
     });
 
 
+
+    //validating my schema 
     const validate = e => {
         let value =
           e.target.type === "checkbox" ? e.target.checked : e.target.value;
@@ -74,16 +76,9 @@ function Form (){
         number:'',
     });
 
-
-
-    //clear form state when we submit. this will clear the document
-    
-
-
     //input change 
     const inputChange = e => {
         e.persist();
-        // console.log("input changed!", e.target.value, e.target.checked);
         validate(e);
         let value =
           e.target.type === "checkbox" ? e.target.checked : e.target.value;
@@ -93,8 +88,11 @@ function Form (){
       //submit my form
     const formSubmit = e => {
         e.preventDefault();
-        console.log("form submitted!");
-        
+        console.log("Your Yummy Pizza Is On The Way!");
+        axios
+        .post("https://reqres.in/api/users", formState)
+        .then(response => console.log(response))
+        .catch(err => console.log(err));
     };
 
     return (
@@ -255,8 +253,10 @@ function Form (){
            </label>
            <button>ADD TO ORDER</button>
            </div>
+           <pre>{JSON.stringify(Form, null, 2)}</pre>
        </form>
     );
+    
 };
 
 export default Form;
