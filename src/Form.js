@@ -13,7 +13,24 @@ function Form (){
         mushrooms:false, 
         onions:false, 
         request:'',
+        number:'',
     });
+
+    const clearForm = () => {
+        setFormState({
+            name:'',
+            size:'',
+            sauce:'',
+            pepperoni:false, 
+            garlic:false, 
+            pineapple:false, 
+            olives:false, 
+            mushrooms:false, 
+            onions:false, 
+            request:'',
+            number:'',
+        })
+    }
 
 
     const inputChange = e => {
@@ -27,6 +44,7 @@ function Form (){
     const formSubmit = e => {
         e.preventDefault();
         console.log("form submitted!");
+        clearForm();
     };
 
     return (
@@ -157,10 +175,24 @@ function Form (){
             value={formState.request}
             onChange={inputChange}
             />
-        
-
            </div>
-
+            <div className="number">
+            <label htmlFor="number">
+               <select
+               value={formState.number}
+               name="number"
+               id="number"
+               onChange={inputChange}>
+                   <option value="">--</option>
+                   <option value="one">1</option>
+                   <option value="two">2</option>
+                   <option value="three">3</option>
+                   <option value="four">4</option>
+                   <option value="five">5</option>
+               </select>
+           </label>
+           <button>ADD TO ORDER</button>
+           </div>
        </form>
     );
 };
